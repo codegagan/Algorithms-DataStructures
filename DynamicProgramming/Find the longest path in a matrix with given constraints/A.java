@@ -1,6 +1,7 @@
 import java.io.*;
 
 public class A{
+	int dp[][];
 	public static void main(String args[])throws IOException
 	{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -9,18 +10,20 @@ public class A{
 		
 		System.out.println("Enter the max. number of columns");
 		int n = Integer.parseInt(br.readLine());
-		
+		A obj = new A();
 		int arr[][] = new int[m][n];
+		obj.dp = new int[m][n];
 		
 		System.out.println("Input distances row-wise");
 		for(int i=0;i<m;i++)
 			for(int j=0;j<n;j++)
 			{
 				arr[i][j] = Integer.parseInt(br.readLine());
+				obj.dp[i][j] = -1;
 			}
 			
 		int max = 0;	
-		A obj = new A();
+		
 		for(int i=0;i<m;i++)
 			for(int j=0;j<n;j++)
 			{
@@ -37,18 +40,34 @@ public class A{
 	{
 		int res = 0;
 		if(i+1 <= m && j <= n && arr[i+1][j] - arr[i][j] == 1)
+		{
+			if(dp[i+1][j] != -1)
+				return dp[i+1][j];
 			res = max(res,1 + longest_path(i+1,j,m,n,arr));
+		}	
 		
 		if(i <= m && j+1 <=n && arr[i][j+1] - arr[i][j] == 1)
+		{
+			if(dp[i][j+1] != -1)
+				return dp[i][j+1];
 			res = max(res,1 + longest_path(i,j+1,m,n,arr));
+		}
 		
 		if(i-1 >= 0 && j <= n && arr[i-1][j] - arr[i][j] == 1)
+		{
+			if(dp[i-1][j] != -1)
+				return dp[i-1][j];
 			res = max(res,1 + longest_path(i-1,j,m,n,arr));
+		}
 		
 		if(i-1 >= 0 && j-1 >= 0 && arr[i-1][j-1] - arr[i][j] == 1)
+		{
+			if(dp[i-1][j-1] != -1)
+				return dp[i-1][j-1];
 			res = max(res,1 + longest_path(i-1,j-1,m,n,arr));
+		}
 		
-		return res;
+		return dp[i][j] = res;
 	}
 	public int max(int a,int b)
 	{
